@@ -13,8 +13,16 @@
  - if person says password, robot shuts off
 '''
 
+#import http.server
+#import socketserver
 from myro import *
 import random, time, sys
+
+#PORT = 8000
+
+#Handler = http.server.SimpleHTTPRequestHandler
+
+#httpd = socketserver.TCPServer(("", PORT), Handler)
 
 initialize("/dev/tty.IPRE6-185822-DevB")
 
@@ -22,13 +30,19 @@ tolerance = 40
 
 target = (255, 255, 0)
 
-while True:
+beep(2, 440)
+
+def playmusic():
+	beep(1, 440)
+	beep(1, 440)
+
+while False:
 	location = [0, 0]
 	picture = takePicture("color")
 	width = getWidth(picture)
 	height = getHeight(picture)
 	middle = width/2.
-	targets = [(middle, height/2)]
+	targets = []
 	pixels = getPixels(picture)
 	for p in pixels:
 		r = getRed(p)
@@ -38,23 +52,35 @@ while True:
 			targets.append(p)
 			location[0] += getX(p)
 			location[1] += getY(p)
-		#	print r, g, b
+			print r, g, b
 #	for p in targets:
 #		location[0] += getX(p)
 #		location[1] += getY(p)
-	location[0]/=len(targets)
-	location[1]/=len(targets)
+	if (len(targets) > 0):
+		location[0]/=len(targets)
+		location[1]/=len(targets)
 			
 	print "x: ", location[0], "y: ", location[1]
 	
 	angle = location[0] - middle
 	print angle
 
-	if abs(angle) > 20:
-		if angle > 0:
-			turnRight(0.3, abs(angle/width))	
+	if len(targets) > 0:
+
+		if abs(angle) > 20:
+			if angle > 0:
+				turnRight(0.3, abs(angle/width))	
+			else:
+				turnRight(-0.3, abs(angle/width))	
 		else:
-			turnRight(-0.3, abs(angle/width))	
+			left = getObstacle('left')
+			center = getObstacle('center')
+			right = getObstacle('right')
+			obstruction = left + right + center
+			if obstruction < 2000:
+				forward(0.5, 1)
+			else:
+				playmusic()
 	else:
-		forward(1, 1)
+		turnRight(0.6, 1)
 
