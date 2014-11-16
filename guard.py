@@ -17,7 +17,7 @@
 #import socketserver
 from myro import *
 import random, time, sys
-
+#import pygame
 #PORT = 8000
 
 #Handler = http.server.SimpleHTTPRequestHandler
@@ -30,7 +30,12 @@ tolerance = 40
 
 target = (255, 255, 0)
 
-beep(2, 440)
+#beep(2, 440)
+while True:
+	picture = takePicture("color")
+	savePicture(picture, "sample.jpg")
+show(picture)
+print("picture working")
 
 def playmusic():
 	beep(1, 440)
