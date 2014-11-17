@@ -1,0 +1,16 @@
+Okay, first go to https://github.com/xelendt/SE101-Scribbler
+
+Then, under HTTPS clone, there will be a hyperlink. Copy that.
+Go into a terminal and type "git clone" and then paste the
+hyperlink and press enter. Now you will have all of the git 
+files in your repository in that directory.
+
+To commit to it, you start by doing "git add "filename"" and
+then it is in the repository. After it is the repository, do a
+"git commit". You will be brought to a screen with in vim. 
+To input text, press 'i' if it does not already say ---INSERT--- 
+on the bottom left corner of the terminal. Once you are done 
+your message, press Esc + ':wq' + Return to commit.
+
+Now to push to the repo, simply type "git push" into your command 
+line, press Return and you are done :)
