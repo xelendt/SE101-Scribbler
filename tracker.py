@@ -11,10 +11,10 @@ LOOKING = 2
 
 '''global variable declarations'''
 
-TOLERANCE = 60
+TOLERANCE = 10
 FOVangle = 20.56
 SIZE = 0 
-COLOR = (255, 255, 60)
+COLOR = (250, 250,250 )
 
 '''method declarations'''
 
@@ -68,7 +68,7 @@ def getTargets(picture):
 		targets = []
 		pixels = getPixels(picture)
 		for p in pixels:
-				if getX(p) == 127 and getY(p) == 127:
+				if getX(p) == 130 and getY(p) == 112:
 						print getRed(p), getGreen(p), getBlue(p)
 				r = getRed(p)
 				g = getGreen(p)
@@ -79,7 +79,15 @@ def getTargets(picture):
 		return targets
 
 def getCubic(locations):
-		pass
+		for i in range(2):
+				p0 = location[len(location)-3][i]
+				p1 = location[len(location)-2][i]
+				m0 = p0-location[len(location)-4][i]
+				m1 = location[len(location)-1][i]-p1
+				a = -2*p1 + 2*p0 + 2*m0 + m1
+				b = 3*p1 - 3*p0 - 3*m0 - m1
+				c = m0
+				d = p0
 
 '''main declaration'''
 
