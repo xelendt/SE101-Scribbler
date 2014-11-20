@@ -44,7 +44,7 @@ def getDistance(pictures, xprev):
 				x2 = getObjectLocation(targets1)[0]
 				a1 = getAngle(x1, 128)
 				a2 = getAngle(x2, 128)
-				distance[0] = math.tan(a2)*(distance[1] + xprev/math.tan(a1))
+				distance[0] = math.tan(a2)*(distance[1] + xprev/math.tan(a1))/4
 
 		return distance
 
@@ -92,7 +92,8 @@ def getTargets(picture):
 #	print "target location", targets[len(targets)-1].getX(), targets[len(targets)-1].getY()
 		return targets
 
-def getCubic(locations):
+def getCubic(location):
+		cubics = [0,0]
 		for i in range(2):
 				p0 = location[len(location)-3][i]
 				p1 = location[len(location)-2][i]
@@ -102,6 +103,8 @@ def getCubic(locations):
 				b = 3*p1 - 3*p0 - 3*m0 - m1
 				c = m0
 				d = p0
+				cubics[i] = [a, b, c, d]
+		return cubics
 
 '''main declaration'''
 
@@ -110,7 +113,7 @@ def main():
 		pictures = []
 		dyvalues = []
 		yvalues = [0] 
-
+		xvalues = [0]
 		for i in range(8):
 				pictures.append(takePicture("color"))
 				if len(locations) > 0:
@@ -122,8 +125,17 @@ def main():
 				print(locations[len(locations)-1][1])
 				dyvalues.append(locations[len(locations)-1][1])
 				yvalues.append(yvalues[len(yvalues)-1]+dyvalues[len(dyvalues)-1])
+				xvalues.append(locations[len(locations)-1][0])
+				if len(locations) >= 4:
+						cubics = getCubic(locations)
+						print cubics[0]
+						print cubics[1]
 		print "Y VALUES:", yvalues
+		plt.figure(1)
+		plt.subplot(211)
 		plt.plot(yvalues)
+		plt.subplot(212)
+		plt.plot(xvalues)
 		plt.show()
 
 main()
