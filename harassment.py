@@ -6,9 +6,9 @@ height = 192
 
 initialize("/dev/tty.IPRE6-185822-DevB")
 
-tolerance = 80 #tolerance of the color
+tolerance = 20 #tolerance of the color
 
-target = (255, 255, 0) #target color
+target = (255, 255, 255) #target color
 
 while True:
 	location = [0, 0] #location of the target
