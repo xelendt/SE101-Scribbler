@@ -2,6 +2,7 @@ from myro import *
 import time, sys
 import numpy
 import matplotlib.pyplot as plt
+import math
 initialize("/dev/tty.IPRE6-185822-DevB")
 
 '''we want to have states for the robot'''
@@ -19,19 +20,32 @@ COLOR = (250, 250,250 )
 '''method declarations'''
 
 #gets the x and y distance from the object, so long as there are more than 1 picture
-def getDistance(pictures):
+
+def getAngle(location, middle):
+		diff = abs(location-middle)
+		return 1.*diff/20.56
+
+def getDistance(pictures, xprev):
 		print "SIZE =", SIZE
 		global FOVangle, SIZE, COLOR
 		distance = [0, 0]
 		if len(pictures) == 1:
 				SIZE = getObjectSize(getTargets(pictures[0]))
 		else:
-				s1 = getObjectSize(getTargets(pictures[len(pictures)-1]))
-				s2 = getObjectSize(getTargets(pictures[len(pictures)-2]))
+				targets1 = getTargets(pictures[len(pictures)-1])
+				targets2 = getTargets(pictures[len(pictures)-2])
+				s1 = getObjectSize(targets1)
+				s2 = getObjectSize(targets2)
 				if s1 == -257 or s2 == -257:
 						return distance
 				else:
 						distance[1] = SIZE*(1./s1 - 1./s2)
+				x1 = getObjectLocation(targets2)[0]
+				x2 = getObjectLocation(targets1)[0]
+				a1 = getAngle(x1, 128)
+				a2 = getAngle(x2, 128)
+				distance[0] = math.tan(a2)*(distance[1] + xprev/math.tan(a1))
+
 		return distance
 
 #gets the size of the object of color in the picture 				
@@ -97,9 +111,13 @@ def main():
 		dyvalues = []
 		yvalues = [0] 
 
-		for i in range(5):
+		for i in range(8):
 				pictures.append(takePicture("color"))
-				locations.append(getDistance(pictures))
+				if len(locations) > 0:
+						locations.append(getDistance(pictures, locations[len(locations)-1][0]))
+				else:
+						locations.append(getDistance(pictures, 0))
+				print "x value", locations[len(locations)-1][0]
 				savePicture(pictures[len(pictures)-1], "sample.jpg")
 				print(locations[len(locations)-1][1])
 				dyvalues.append(locations[len(locations)-1][1])
